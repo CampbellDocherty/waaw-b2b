@@ -15,14 +15,52 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const { cube, edges } = addCubeToScene(scene);
-const { ball, ballGeometry, ballPosition, ballVelocity } =
-  addBallToScene(scene);
+const {
+  ball: ball1,
+  ballGeometry: ballGeometry1,
+  ballPosition: ballPosition1,
+  ballVelocity: ballVelocity1,
+} = addBallToScene(scene);
+
+const {
+  ball: ball2,
+  ballGeometry: ballGeometry2,
+  ballPosition: ballPosition2,
+  ballVelocity: ballVelocity2,
+} = addBallToScene(
+  scene,
+  {
+    x: -0.2,
+    y: -0.2,
+    z: -0.4,
+  },
+  0.005,
+  "blue"
+);
+
+const {
+  ball: ball3,
+  ballGeometry: ballGeometry3,
+  ballPosition: ballPosition3,
+  ballVelocity: ballVelocity3,
+} = addBallToScene(
+  scene,
+  {
+    x: 0.1,
+    y: -0.2,
+    z: -0.4,
+  },
+  0.006,
+  "sandybrown"
+);
 
 camera.position.z = 3;
 
 const animate = () => {
   requestAnimationFrame(animate);
-  animateBall(ball, ballGeometry, ballPosition, ballVelocity);
+  animateBall(ball1, ballGeometry1, ballPosition1, ballVelocity1);
+  animateBall(ball2, ballGeometry2, ballPosition2, ballVelocity2, 0.4);
+  animateBall(ball3, ballGeometry3, ballPosition3, ballVelocity3, 0.5);
   animateCube(cube, edges);
 
   renderer.render(scene, camera);
