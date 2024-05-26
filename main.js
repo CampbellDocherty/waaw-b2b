@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { addCubeToScene, animateCube } from "./cube";
+import { addBallToScene, animateBall } from "./ball";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -7,60 +9,61 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-
 const renderer = new THREE.WebGLRenderer();
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({
-  color: 0x000000,
-  transparent: true,
-  opacity: 0.5,
-});
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+const { cube, edges } = addCubeToScene(scene);
+const {
+  ball: ball1,
+  ballGeometry: ballGeometry1,
+  ballPosition: ballPosition1,
+  ballVelocity: ballVelocity1,
+} = addBallToScene(scene);
 
-const edgesGeometry = new THREE.EdgesGeometry(geometry);
-const edgesMaterial = new THREE.LineBasicMaterial({
-  color: 0xffffff,
-  linewidth: 10,
-});
-const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
-scene.add(edges);
+const {
+  ball: ball2,
+  ballGeometry: ballGeometry2,
+  ballPosition: ballPosition2,
+  ballVelocity: ballVelocity2,
+} = addBallToScene(
+  scene,
+  {
+    x: -0.2,
+    y: -0.2,
+    z: -0.4,
+  },
+  0.005,
+  "blue"
+);
+
+const {
+  ball: ball3,
+  ballGeometry: ballGeometry3,
+  ballPosition: ballPosition3,
+  ballVelocity: ballVelocity3,
+} = addBallToScene(
+  scene,
+  {
+    x: 0.1,
+    y: -0.2,
+    z: -0.4,
+  },
+  0.006,
+  "sandybrown"
+);
 
 camera.position.z = 3;
 
-const ballGeometry = new THREE.SphereGeometry(0.1, 16, 16);
-const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-const ball = new THREE.Mesh(ballGeometry, ballMaterial);
-scene.add(ball);
-
-let ballPosition = new THREE.Vector3(0, 0, 0);
-let ballVelocity = new THREE.Vector3(0.01, 0.01, 0.01);
-
-function animate() {
+const animate = () => {
   requestAnimationFrame(animate);
-
-  ballPosition.add(ballVelocity);
-
-  if (Math.abs(ballPosition.x) + ballGeometry.parameters.radius > 0.35)
-    ballVelocity.x = -ballVelocity.x;
-  if (Math.abs(ballPosition.y) + ballGeometry.parameters.radius > 0.35)
-    ballVelocity.y = -ballVelocity.y;
-  if (Math.abs(ballPosition.z) + ballGeometry.parameters.radius > 0.35)
-    ballVelocity.z = -ballVelocity.z;
-
-  ball.position.set(ballPosition.x, ballPosition.y, ballPosition.z);
-
-  cube.rotation.x += 0.01;
-  edges.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  edges.rotation.y += 0.01;
-  cube.rotation.z += 0.01;
-  edges.rotation.z += 0.01;
+  animateBall(ball1, ballGeometry1, ballPosition1, ballVelocity1);
+  animateBall(ball2, ballGeometry2, ballPosition2, ballVelocity2, 0.4);
+  animateBall(ball3, ballGeometry3, ballPosition3, ballVelocity3, 0.5);
+  animateCube(cube, edges);
 
   renderer.render(scene, camera);
-}
+};
 
 animate();
