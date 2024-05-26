@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { addCubeToScene, animateCube } from "./cube";
-import { addBallToScene, animateBall } from "./ball";
+import { addCubeToScene, animateCube } from "./cube.js";
+import { addBallToScene, animateBall } from "./ball.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
