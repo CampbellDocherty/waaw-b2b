@@ -114,22 +114,99 @@ const createBoxGeometry = () => {
   return boxGeometry;
 };
 
-export const addCubeToScene = (scene, xPosition = -1) => {
-  const geometry = createBoxGeometry();
+const createFaceTextures = () => {
+  const faceTextures = [...Array(8)].fill(0).map((_, i) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const context = canvas.getContext("2d");
+    context.font = "bolder 90px verdana";
+    context.fillStyle = "green";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "black";
+    context.fillText(i.toString(), 256, 256);
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+  });
+
+  return faceTextures;
+};
+
+export const addCubeToScene = (scene, xPosition = -0.55) => {
+  // const geometry = createBoxGeometry();
+
+  const geometry = new THREE.OctahedronGeometry(0.5);
+
+  const faceTextures = createFaceTextures();
+
+  // geometry.faces.forEach((face) => {
+  //   const v1 = geometry.vertices[face.a];
+  //   const v2 = geometry.vertices[face.b];
+  //   const v3 = geometry.vertices[face.c];
+
+  //   const center = new THREE.Vector3().add(v1).add(v2).add(v3).divideScalar(3);
+
+  //   faceCenters.push(center);
+  // });
+
+  function createTextCanvas(text, width, height) {
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    context.fillStyle = "white";
+    context.fillRect(0, 0, width, height);
+    context.fillStyle = "black";
+    context.font = `${height / 2}px Arial`;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(text, width / 2, height / 2);
+    return canvas;
+  }
+
+  // Create textures from canvases
+  const size = 256;
+  const textures = [
+    new THREE.CanvasTexture(createTextCanvas("1", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("2", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("3", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("4", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("5", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("6", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("7", size, size)),
+    new THREE.CanvasTexture(createTextCanvas("8", size, size)),
+  ];
+
+  // Create materials and assign textures
+  const materials = [];
+  for (let i = 0; i < geometry.attributes.position.count / 3; i++) {
+    materials.push(
+      new THREE.MeshBasicMaterial({ map: textures[i % textures.length] })
+    );
+  }
+
+  // const material = new THREE.MeshBasicMaterial({
+  //   color: 0xffffff,
+  // });
+  const dice = new THREE.Mesh(geometry, materials);
+
+  scene.add(dice);
+  dice.position.set(xPosition, 0, 0);
 
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
   const edgesMaterial = new THREE.LineBasicMaterial({
-    color: 0xffffff,
+    color: 0x000000,
   });
   const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
   scene.add(edges);
 
   edges.position.set(xPosition, 0, 0);
 
-  return edges;
+  return { dice, edges };
 };
 
 export const animateCube = (
+  dice,
   edges,
   rotation = {
     x: 0.004,
@@ -138,6 +215,9 @@ export const animateCube = (
   }
 ) => {
   edges.rotation.x += rotation.x;
+  dice.rotation.x += rotation.x;
   edges.rotation.y += rotation.y;
+  dice.rotation.y += rotation.y;
   edges.rotation.z += rotation.z;
+  dice.rotation.z += rotation.z;
 };
