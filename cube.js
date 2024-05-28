@@ -114,30 +114,85 @@ const createBoxGeometry = () => {
   return boxGeometry;
 };
 
+function createInnerGeometry() {
+  // keep the plane size equal to flat surface of cube
+  const baseGeometry = new THREE.PlaneGeometry(
+    1 - 2 * params.edgeRadius,
+    1 - 2 * params.edgeRadius
+  );
+
+  // place planes a bit behind the box sides
+  const offset = 0.48;
+
+  // and merge them as we already have BufferGeometryUtils file loaded :)
+  return BufferGeometryUtils.mergeGeometries(
+    [
+      baseGeometry.clone().translate(0, 0, offset),
+      baseGeometry.clone().translate(0, 0, -offset),
+      baseGeometry
+        .clone()
+        .rotateX(0.5 * Math.PI)
+        .translate(0, -offset, 0),
+      baseGeometry
+        .clone()
+        .rotateX(0.5 * Math.PI)
+        .translate(0, offset, 0),
+      baseGeometry
+        .clone()
+        .rotateY(0.5 * Math.PI)
+        .translate(-offset, 0, 0),
+      baseGeometry
+        .clone()
+        .rotateY(0.5 * Math.PI)
+        .translate(offset, 0, 0),
+    ],
+    false
+  );
+}
+
 export const addCubeToScene = (scene, xPosition = -1) => {
-  const geometry = createBoxGeometry();
-
-  const edgesGeometry = new THREE.EdgesGeometry(geometry);
-  const edgesMaterial = new THREE.LineBasicMaterial({
-    color: 0xffffff,
+  const boxMaterialOuter = new THREE.MeshStandardMaterial({
+    color: 0xeeeeee,
   });
-  const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
-  scene.add(edges);
+  const boxMaterialInner = new THREE.MeshStandardMaterial({
+    color: 0x000000,
+    roughness: 0,
+    metalness: 1,
+    side: THREE.DoubleSide,
+  });
 
-  edges.position.set(xPosition, 0, 0);
+  const diceMesh = new THREE.Group();
+  const innerMesh = new THREE.Mesh(createInnerGeometry(), boxMaterialInner);
+  const outerMesh = new THREE.Mesh(createBoxGeometry(), boxMaterialOuter);
 
-  return edges;
+  // const edgesGeometry = new THREE.EdgesGeometry(outerMesh);
+  // const edgesMaterial = new THREE.LineBasicMaterial({
+  //   color: 0x000000,
+  // });
+  // const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+
+  // edges.position.set(xPosition, 0, 0);
+  // cube.position.set(xPosition, 0, 0);
+
+  diceMesh.add(innerMesh, outerMesh, edges);
+
+  diceMesh.position.set(xPosition, 0, 0);
+
+  scene.add(diceMesh);
+
+  return diceMesh;
+  return group;
 };
 
 export const animateCube = (
-  edges,
+  dice,
   rotation = {
     x: 0.004,
     y: 0.004,
     z: 0.004,
   }
 ) => {
-  edges.rotation.x += rotation.x;
-  edges.rotation.y += rotation.y;
-  edges.rotation.z += rotation.z;
+  dice.rotation.x += rotation.x;
+  dice.rotation.y += rotation.y;
+  dice.rotation.z += rotation.z;
 };

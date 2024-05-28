@@ -202,6 +202,11 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.5.tgz#a6ce3e556e00fd9895dd872dd172ad0d4bd687f4"
   integrity sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==
 
+cannon-es@^0.20.0:
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/cannon-es/-/cannon-es-0.20.0.tgz#bf2f62a674701f37e3d861c90668a32d4d32f082"
+  integrity sha512-eZhWTZIkFOnMAJOgfXJa9+b3kVlvG+FX4mdkpePev/w/rP5V8NRquGyEozcjPfEoXUlb+p7d9SUcmDSn14prOA==
+
 esbuild@^0.20.1:
   version "0.20.2"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.20.2.tgz#9d6b2386561766ee6b5a55196c6d766d28c87ea1"
