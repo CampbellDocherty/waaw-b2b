@@ -7,6 +7,8 @@ const canvasEl = document.querySelector("#canvas");
 
 let renderer, scene, camera, physicsWorld;
 
+let gravity = false;
+
 const params = {
   numberOfDice: 2,
   segments: 40,
@@ -21,7 +23,13 @@ initPhysics();
 initScene();
 
 window.addEventListener("resize", updateSceneSize);
-window.addEventListener("dblclick", throwDice);
+window.addEventListener("click", triggerDiceThrow);
+
+function triggerDiceThrow() {
+  gravity = true;
+  physicsWorld.gravity.set(0, -50, 0);
+  throwDice();
+}
 
 function initScene() {
   renderer = new THREE.WebGLRenderer({
@@ -48,7 +56,7 @@ function initScene() {
   const ambientLight = new THREE.AmbientLight(0xffffff, 2);
   scene.add(ambientLight);
   const topLight = new THREE.PointLight(0xffffff, 0.5);
-  topLight.position.set(4, 12, 0);
+  topLight.position.set(0, 4, 0);
   topLight.castShadow = true;
   topLight.shadow.camera.near = 5;
   topLight.shadow.camera.far = 700;
@@ -67,7 +75,7 @@ function initScene() {
 function initPhysics() {
   physicsWorld = new CANNON.World({
     allowSleep: true,
-    gravity: new CANNON.Vec3(0, -50, 0),
+    // gravity: gravity ? new CANNON.Vec3(0, -50, 0) : new CANNON.Vec3(0, 0, 0),
   });
   physicsWorld.defaultContactMaterial.restitution = 0.3;
 }
@@ -266,13 +274,22 @@ function createInnerGeometry() {
   );
 }
 
+console.log(diceArray[0].mesh);
+
 function render() {
   physicsWorld.fixedStep();
 
-  for (const dice of diceArray) {
+  diceArray.forEach((dice, index) => {
     dice.mesh.position.copy(dice.body.position);
     dice.mesh.quaternion.copy(dice.body.quaternion);
-  }
+    if (gravity) {
+      return;
+    }
+    dice.mesh.rotation.x += index === 0 ? 0.01 : 0.014;
+    dice.mesh.rotation.y += index === 0 ? 0.003 : 0.003;
+    dice.mesh.rotation.z += index === 0 ? 0.014 : 0.008;
+    dice.body.quaternion.copy(dice.mesh.quaternion);
+  });
 
   renderer.render(scene, camera);
   requestAnimationFrame(render);
@@ -289,17 +306,19 @@ function throwDice() {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(0, dIdx * 1.5, dIdx === 0 ? 0 : 1.5);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -1 : 1, 0, 1);
     d.mesh.position.copy(d.body.position);
 
-    d.mesh.rotation.set(2, 0, 2);
+    d.mesh.rotation.set(0, 0, 0);
     d.body.quaternion.copy(d.mesh.quaternion);
 
-    const force = 1 + 1 * Math.random();
-    d.body.applyImpulse(
-      new CANNON.Vec3(0, force, 0),
-      new CANNON.Vec3(0, 0, 0.2)
-    );
+    const force = 0.1 + 0.1 * Math.random();
+    if (gravity) {
+      d.body.applyImpulse(
+        new CANNON.Vec3(0, force, 0),
+        new CANNON.Vec3(0, 0, 0.2)
+      );
+    }
 
     d.body.allowSleep = true;
   });
