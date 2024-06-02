@@ -73,7 +73,6 @@ function triggerDiceThrow() {
 
 function initScene() {
   renderer = new THREE.WebGLRenderer({
-    alpha: true,
     antialias: true,
     canvas: canvasEl,
   });
@@ -120,24 +119,32 @@ function initPhysics() {
 }
 
 function createFloor() {
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(1000, 1000),
-    new THREE.ShadowMaterial({
-      opacity: 0.1,
-    })
-  );
-  floor.receiveShadow = true;
-  floor.position.y = -7;
-  floor.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI * 0.5);
-  scene.add(floor);
-
-  const floorBody = new CANNON.Body({
-    type: CANNON.Body.STATIC,
-    shape: new CANNON.Plane(),
+  let floor;
+  const loader = new THREE.TextureLoader();
+  loader.load("assets/text.png", function (texture) {
+    floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 20),
+      new THREE.MeshBasicMaterial({
+        map: texture,
+        alphaHash: true,
+        alphaMap: texture,
+      })
+    );
+    floor.receiveShadow = true;
+    floor.position.y = -7;
+    floor.quaternion.setFromAxisAngle(
+      new THREE.Vector3(-1, 0, 0),
+      Math.PI * 0.5
+    );
+    scene.add(floor);
+    const floorBody = new CANNON.Body({
+      type: CANNON.Body.STATIC,
+      shape: new CANNON.Plane(),
+    });
+    floorBody.position.copy(floor.position);
+    floorBody.quaternion.copy(floor.quaternion);
+    physicsWorld.addBody(floorBody);
   });
-  floorBody.position.copy(floor.position);
-  floorBody.quaternion.copy(floor.quaternion);
-  physicsWorld.addBody(floorBody);
 }
 
 function createDiceMesh() {
@@ -344,8 +351,6 @@ function getRandomElement(arr) {
   const index = Math.floor(Math.random() * copyArr.length);
 
   let element = copyArr.splice(index, 1)[0];
-
-  console.log(element);
 
   while (alreadyShown.includes(element.value)) {
     element = copyArr.splice(index, 1)[0];
