@@ -50,7 +50,12 @@ const options = [
   },
 ];
 
-const alreadyShown = [];
+let alreadyShown = [];
+let diceRolls = 0;
+
+function resetShown() {
+  alreadyShown = [];
+}
 
 const diceArray = [];
 
@@ -110,7 +115,6 @@ function initScene() {
 function initPhysics() {
   physicsWorld = new CANNON.World({
     allowSleep: true,
-    // gravity: gravity ? new CANNON.Vec3(0, -50, 0) : new CANNON.Vec3(0, 0, 0),
   });
   physicsWorld.defaultContactMaterial.restitution = 0.3;
 }
@@ -335,12 +339,17 @@ function updateSceneSize() {
 }
 
 function getRandomElement(arr) {
-  if (arr.length === 0) {
-    throw new Error("Array must have at least 1 element");
-  }
+  const copyArr = arr.slice();
 
-  const index = Math.floor(Math.random() * arr.length);
-  const element = arr.splice(index, 1)[0];
+  const index = Math.floor(Math.random() * copyArr.length);
+
+  let element = copyArr.splice(index, 1)[0];
+
+  console.log(element);
+
+  while (alreadyShown.includes(element.value)) {
+    element = copyArr.splice(index, 1)[0];
+  }
 
   alreadyShown.push(element.value);
 
@@ -361,6 +370,13 @@ function initDicePosition() {
 }
 
 function throwDice() {
+  diceRolls += 1;
+
+  if (diceRolls > 3) {
+    resetShown();
+    diceRolls = 1;
+  }
+
   diceArray.forEach((d, dIdx) => {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
