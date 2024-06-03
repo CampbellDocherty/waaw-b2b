@@ -2,6 +2,7 @@ import * as CANNON from "cannon-es";
 
 import * as THREE from "three";
 import { options } from "./options.js";
+import { or } from "three/examples/jsm/nodes/Nodes.js";
 
 const canvasEl = document.querySelector("#canvas");
 
@@ -172,13 +173,6 @@ function initDicePosition() {
   });
 }
 
-let alreadyShown = [];
-let diceRolls = 0;
-
-function resetShown() {
-  alreadyShown = [];
-}
-
 window.addEventListener("click", triggerDiceThrow);
 
 function triggerDiceThrow() {
@@ -188,27 +182,18 @@ function triggerDiceThrow() {
 }
 
 function getRandomElement(arr) {
-  const copyArr = arr.slice();
+  const index = Math.floor(Math.random() * arr.length);
 
-  const index = Math.floor(Math.random() * copyArr.length);
-
-  let element = copyArr.splice(index, 1)[0];
-
-  while (alreadyShown.includes(element.value)) {
-    element = copyArr.splice(index, 1)[0];
-  }
-
-  alreadyShown.push(element.value);
+  const element = arr.splice(index, 1)[0];
 
   return element;
 }
+let original = options.slice();
+let copy = options.slice();
 
 function throwDice() {
-  diceRolls += 1;
-
-  if (diceRolls > 3) {
-    resetShown();
-    diceRolls = 1;
+  if (copy.length === 0) {
+    copy = original.slice();
   }
 
   diceArray.forEach((d, dIdx) => {
@@ -221,7 +206,7 @@ function throwDice() {
     d.mesh.rotation.set(0, 0, 0);
     d.body.quaternion.copy(d.mesh.quaternion);
 
-    const element = getRandomElement(options);
+    const element = getRandomElement(copy);
 
     const { randomForce, position } = element;
 
