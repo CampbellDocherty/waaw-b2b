@@ -188,12 +188,12 @@ function getRandomElement(arr) {
 
   return element;
 }
-let original = options.slice();
+
 let copy = options.slice();
 
 function throwDice() {
   if (copy.length === 0) {
-    copy = original.slice();
+    copy = options.slice();
   }
 
   diceArray.forEach((d, dIdx) => {
