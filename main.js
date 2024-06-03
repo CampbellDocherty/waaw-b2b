@@ -169,9 +169,32 @@ function createDiceMesh() {
 }
 
 function createDice() {
-  const mesh = createDiceMesh();
+  // const mesh = createDiceMesh();
 
-  scene.add(mesh);
+  const textureLoader = new THREE.TextureLoader();
+  const textures = [
+    textureLoader.load("assets/naomi.png"),
+    textureLoader.load("assets/becca.png"),
+    textureLoader.load("assets/abdiablo.png"),
+    textureLoader.load("assets/lc.png"),
+    textureLoader.load("assets/randy.png"),
+    textureLoader.load("assets/viriss.png"),
+  ];
+
+  // Create materials for each face
+  const materials = textures.map(
+    (texture) =>
+      new THREE.MeshLambertMaterial({
+        map: texture,
+        alphaTest: 0.8,
+      })
+  );
+
+  // Create box geometry and apply the materials
+  const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+  const cube = new THREE.Mesh(geometry, materials);
+
+  scene.add(cube);
 
   const body = new CANNON.Body({
     mass: 1,
@@ -180,7 +203,7 @@ function createDice() {
   });
   physicsWorld.addBody(body);
 
-  return { mesh, body };
+  return { mesh: cube, body };
 }
 
 function createBoxGeometry() {
@@ -366,7 +389,7 @@ function initDicePosition() {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(dIdx === 0 ? -1 : 1, 0, 1);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
     d.mesh.position.copy(d.body.position);
 
     d.mesh.rotation.set(0, 0, 0);
@@ -386,7 +409,7 @@ function throwDice() {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(dIdx === 0 ? -1 : 1, 0, 1);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
     d.mesh.position.copy(d.body.position);
 
     d.mesh.rotation.set(0, 0, 0);
