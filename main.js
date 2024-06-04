@@ -2,13 +2,14 @@ import * as CANNON from "cannon-es";
 
 import * as THREE from "three";
 import { options } from "./options.js";
-import { or } from "three/examples/jsm/nodes/Nodes.js";
+import * as TWEEN from "@tweenjs/tween.js";
 
 const canvasEl = document.querySelector("#canvas");
 
 let renderer, scene, camera, physicsWorld;
 
 let gravity = false;
+let djSelected = false;
 
 const params = {
   numberOfDice: 2,
@@ -141,9 +142,10 @@ function render() {
   diceArray.forEach((dice, index) => {
     dice.mesh.position.copy(dice.body.position);
     dice.mesh.quaternion.copy(dice.body.quaternion);
-    if (gravity) {
+    if (gravity || djSelected) {
       return;
     }
+
     dice.mesh.rotation.x += index === 0 ? 0.007 : 0.004;
     dice.mesh.rotation.y += index === 0 ? 0.003 : 0.003;
     dice.mesh.rotation.z += index === 0 ? 0.004 : 0.008;
@@ -151,6 +153,7 @@ function render() {
   });
 
   renderer.render(scene, camera);
+  TWEEN.update();
   requestAnimationFrame(render);
 }
 
@@ -215,5 +218,37 @@ function throwDice() {
     }
 
     d.body.allowSleep = true;
+
+    const endPosition = {
+      x: d.body.position.x,
+      y: d.body.position.y,
+      z: d.body.position.z,
+    };
+    d.body.addEventListener("sleep", () => {
+      const startPosition = {
+        x: d.body.position.x,
+        y: d.body.position.y,
+        z: d.body.position.z,
+      };
+      const tween = new TWEEN.Tween(startPosition)
+        .to(endPosition, 2000)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          d.body.quaternion.copy(d.mesh.quaternion);
+
+          d.body.position = new CANNON.Vec3(
+            startPosition.x,
+            startPosition.y,
+            startPosition.z
+          );
+          d.mesh.position.copy(d.body.position);
+        });
+
+      djSelected = true;
+      setTimeout(() => {
+        tween.start();
+        gravity = false;
+      }, 1000);
+    });
   });
 }
