@@ -2,7 +2,7 @@ import * as CANNON from "cannon-es";
 
 import * as THREE from "three";
 import { options } from "./options.js";
-import * as TWEEN from "@tweenjs/tween.js";
+import { Tween, Easing, Group } from "@tweenjs/tween.js";
 
 const canvasEl = document.querySelector("#canvas");
 
@@ -20,7 +20,7 @@ const params = {
 };
 
 const diceArray = [];
-const tweens = [];
+const tweensGroup = new Group();
 
 initPhysics();
 initScene();
@@ -154,6 +154,7 @@ function render() {
   });
 
   renderer.render(scene, camera);
+  const tweens = tweensGroup.getAll();
   tweens.forEach((tween) => {
     tween.update();
   });
@@ -198,7 +199,7 @@ function getRandomElement(arr) {
 let copy = options.slice();
 
 function throwDice() {
-  tweens.splice(0, tweens.length);
+  tweensGroup.removeAll();
   if (copy.length === 0) {
     copy = options.slice();
   }
@@ -234,9 +235,10 @@ function throwDice() {
         y: d.body.position.y,
         z: d.body.position.z,
       };
-      const tween = new TWEEN.Tween(startPosition)
+
+      const tween = new Tween(startPosition)
         .to(endPosition, 2000)
-        .easing(TWEEN.Easing.Quadratic.InOut)
+        .easing(Easing.Quadratic.InOut)
         .onUpdate(() => {
           d.body.quaternion.copy(d.mesh.quaternion);
 
@@ -249,7 +251,7 @@ function throwDice() {
         });
 
       djSelected = true;
-      tweens.push(tween);
+      tweensGroup.add(tween);
       setTimeout(() => {
         tween.start();
         gravity = false;
