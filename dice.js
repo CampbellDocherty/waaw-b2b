@@ -1,17 +1,18 @@
 import * as CANNON from "cannon-es";
 import * as THREE from "three";
-import { scene, physicsWorld } from "./main.js";
+import { Easing, Tween } from "@tweenjs/tween.js";
+import { options } from "./options.js";
 
-export function initDice() {
-  const dice1 = createDice();
-  const dice2 = createDice();
+export function initDice({ physicsWorld, scene }) {
+  const dice1 = createDice({ physicsWorld, scene });
+  const dice2 = createDice({ physicsWorld, scene });
 
   const dice = [dice1, dice2];
   initDicePosition(dice);
   return dice;
 }
 
-export function createDice() {
+export function createDice({ physicsWorld, scene }) {
   const textureLoader = new THREE.TextureLoader();
   const textures = [
     textureLoader.load("assets/naomi.png"),
@@ -55,5 +56,75 @@ export function initDicePosition(dice) {
 
     d.mesh.rotation.set(0, 0, 0);
     d.body.quaternion.copy(d.mesh.quaternion);
+  });
+}
+
+function getRandomElement(arr) {
+  const index = Math.floor(Math.random() * arr.length);
+  const element = arr.splice(index, 1)[0];
+  return element;
+}
+
+let copy = options.slice();
+
+export function throwDice({ dice, physicsWorld, tweensGroup }) {
+  physicsWorld.gravity.set(0, -50, 0);
+  tweensGroup.removeAll();
+  if (copy.length === 0) {
+    copy = options.slice();
+  }
+
+  dice.forEach((d, dIdx) => {
+    d.body.velocity.setZero();
+    d.body.angularVelocity.setZero();
+
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
+    d.mesh.position.copy(d.body.position);
+
+    d.mesh.rotation.set(0, 0, 0);
+    d.body.quaternion.copy(d.mesh.quaternion);
+
+    const element = getRandomElement(copy);
+
+    const { randomForce, position } = element;
+
+    if (!physicsWorld.gravity.isZero()) {
+      d.body.applyImpulse(new CANNON.Vec3(0, randomForce, 0), position);
+    }
+
+    d.body.allowSleep = true;
+
+    const endPosition = {
+      x: d.body.position.x,
+      y: d.body.position.y,
+      z: d.body.position.z,
+    };
+    d.body.addEventListener("sleep", () => {
+      const startPosition = {
+        x: d.body.position.x,
+        y: d.body.position.y,
+        z: d.body.position.z,
+      };
+
+      const tween = new Tween(startPosition)
+        .to(endPosition, 2000)
+        .easing(Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          d.body.quaternion.copy(d.mesh.quaternion);
+
+          d.body.position = new CANNON.Vec3(
+            startPosition.x,
+            startPosition.y,
+            startPosition.z
+          );
+          d.mesh.position.copy(d.body.position);
+        });
+
+      tweensGroup.add(tween);
+      setTimeout(() => {
+        tween.start();
+        physicsWorld.gravity.setZero();
+      }, 1000);
+    });
   });
 }
