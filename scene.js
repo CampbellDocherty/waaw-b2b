@@ -23,6 +23,7 @@ export function initScene() {
   camera.lookAt(0, 0, 0);
 
   updateSceneSize(camera, renderer);
+  window.addEventListener("resize", () => updateSceneSize(camera, renderer));
 
   const ambientLight = new THREE.AmbientLight(16777215, 2);
   scene.add(ambientLight);
@@ -69,5 +70,3 @@ export function updateSceneSize(camera, renderer) {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
-window.addEventListener("resize", () => updateSceneSize(camera, renderer));
