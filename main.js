@@ -1,6 +1,5 @@
 import { Group } from "@tweenjs/tween.js";
 import { initDice } from "./dice.js";
-import { options } from "./options.js";
 import { initPhysics } from "./physics.js";
 import { createFloor, initScene } from "./scene.js";
 import { render } from "./render.js";
