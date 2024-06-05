@@ -20,6 +20,7 @@ const params = {
 };
 
 const diceArray = [];
+const tweens = [];
 
 initPhysics();
 initScene();
@@ -153,7 +154,9 @@ function render() {
   });
 
   renderer.render(scene, camera);
-  TWEEN.update();
+  tweens.forEach((tween) => {
+    tween.update();
+  });
   requestAnimationFrame(render);
 }
 
@@ -195,6 +198,7 @@ function getRandomElement(arr) {
 let copy = options.slice();
 
 function throwDice() {
+  tweens.splice(0, tweens.length);
   if (copy.length === 0) {
     copy = options.slice();
   }
@@ -245,6 +249,7 @@ function throwDice() {
         });
 
       djSelected = true;
+      tweens.push(tween);
       setTimeout(() => {
         tween.start();
         gravity = false;
