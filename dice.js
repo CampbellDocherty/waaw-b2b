@@ -88,9 +88,7 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
 
     const { randomForce, position } = element;
 
-    if (!physicsWorld.gravity.isZero()) {
-      d.body.applyImpulse(new CANNON.Vec3(0, randomForce, 0), position);
-    }
+    d.body.applyImpulse(new CANNON.Vec3(0, randomForce, 0), position);
 
     d.body.allowSleep = true;
 
@@ -121,6 +119,7 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
         });
 
       tweensGroup.add(tween);
+
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
