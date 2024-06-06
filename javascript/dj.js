@@ -3,57 +3,57 @@ import { initNameCanvas } from "./canvas.js";
 let fonts = {
   abdi: {
     src: "assets/fonts/abdiablo-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   naomi: {
     src: "assets/fonts/naomi-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   clarisse: {
     src: "assets/fonts/viriss-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   becca: {
     src: "assets/fonts/becca-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   lc: {
     src: "assets/fonts/lc-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   randy: {
     src: "assets/fonts/randy-font.png",
-    width: 600,
-    height: 250,
+    width: 500,
+    height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   albertina: {
     src: "assets/fonts/albertina-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   hiteca: {
     src: "assets/fonts/hiteca-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
@@ -67,17 +67,9 @@ export function updateDjName(djOne, djTwo) {
   fontOne.y = 5;
 
   fontTwo.x = 605;
-  fontTwo.y = 805;
+  fontTwo.y = 405;
   fontTwo.xSpeed = -fontTwo.xSpeed;
   fontTwo.ySpeed = -fontTwo.ySpeed;
 
   initNameCanvas([fonts[djOne], fonts[djTwo]]);
-}
-
-export function clearDjName() {
-  const elOne = document.getElementById("dj-one");
-  const elTwo = document.getElementById("dj-two");
-
-  elOne.src = "";
-  elTwo.src = "";
 }

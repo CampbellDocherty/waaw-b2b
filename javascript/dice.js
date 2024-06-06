@@ -2,7 +2,7 @@ import * as CANNON from "cannon-es";
 import * as THREE from "three";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { firstList, secondList } from "./options.js";
-import { clearDjName, updateDjName } from "./dj.js";
+import { updateDjName } from "./dj.js";
 
 export function initDice({ physicsWorld, scene }) {
   const dice1 = createDice({ physicsWorld, scene, index: 0 });
@@ -75,7 +75,6 @@ function getRandomElement(arr) {
 export function throwDice({ dice, physicsWorld, tweensGroup }) {
   physicsWorld.gravity.set(0, -50, 0);
   tweensGroup.removeAll();
-  clearDjName();
 
   if (firstListCopy.length === 0) {
     firstListCopy = firstList.slice();
