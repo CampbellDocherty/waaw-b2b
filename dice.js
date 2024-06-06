@@ -36,6 +36,13 @@ export function createDice({ physicsWorld, scene }) {
 
   scene.add(cube);
 
+  const edges = new THREE.EdgesGeometry(geometry);
+  const line = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 200 })
+  );
+  cube.add(line);
+
   const body = new CANNON.Body({
     mass: 1,
     shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)),
