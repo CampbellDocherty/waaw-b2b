@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { firstList, secondList } from "./options.js";
 import { clearDjName, updateDjName } from "./dj.js";
+import { initNameCanvas } from "./canvas.js";
 
 export function initDice({ physicsWorld, scene }) {
   const dice1 = createDice({ physicsWorld, scene, index: 0 });
@@ -149,8 +150,10 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
-        updateDjName(djOne, djTwo);
       }, 1000);
     });
   });
+  setTimeout(() => {
+    updateDjName(djOne, djTwo);
+  }, 2000);
 }
