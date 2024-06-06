@@ -40,13 +40,6 @@ export function createDice({ physicsWorld, scene, index }) {
 
   scene.add(cube);
 
-  const edges = new THREE.EdgesGeometry(geometry);
-  const line = new THREE.LineSegments(
-    edges,
-    new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 200 })
-  );
-  cube.add(line);
-
   const body = new CANNON.Body({
     mass: 1,
     shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)),
@@ -146,13 +139,15 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
 
       tweensGroup.add(tween);
 
+      if (dIdx === 1) {
+        setTimeout(() => {
+          updateDjName(djOne, djTwo);
+        }, 3000);
+      }
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
       }, 1000);
     });
   });
-  setTimeout(() => {
-    updateDjName(djOne, djTwo);
-  }, 2000);
 }
