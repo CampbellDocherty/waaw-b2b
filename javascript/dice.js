@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { firstList, secondList } from "./options.js";
 import { clearDjName, updateDjName } from "./dj.js";
-import { initNameCanvas } from "./canvas.js";
 
 export function initDice({ physicsWorld, scene }) {
   const dice1 = createDice({ physicsWorld, scene, index: 0 });
@@ -18,15 +17,15 @@ export function createDice({ physicsWorld, scene, index }) {
   const textureLoader = new THREE.TextureLoader();
   const textures = [
     index === 0
-      ? textureLoader.load("assets/naomi.png")
-      : textureLoader.load("assets/albertina.png"),
+      ? textureLoader.load("assets/faces/naomi.png")
+      : textureLoader.load("assets/faces/albertina.png"),
     index === 0
-      ? textureLoader.load("assets/becca.png")
-      : textureLoader.load("assets/hiteca.png"),
-    textureLoader.load("assets/abdiablo.png"),
-    textureLoader.load("assets/lc.png"),
-    textureLoader.load("assets/randy.png"),
-    textureLoader.load("assets/viriss.png"),
+      ? textureLoader.load("assets/faces/becca.png")
+      : textureLoader.load("assets/faces/hiteca.png"),
+    textureLoader.load("assets/faces/abdiablo.png"),
+    textureLoader.load("assets/faces/lc.png"),
+    textureLoader.load("assets/faces/randy.png"),
+    textureLoader.load("assets/faces/viriss.png"),
   ];
 
   const materials = textures.map(
@@ -40,13 +39,6 @@ export function createDice({ physicsWorld, scene, index }) {
   const cube = new THREE.Mesh(geometry, materials);
 
   scene.add(cube);
-
-  const edges = new THREE.EdgesGeometry(geometry);
-  const line = new THREE.LineSegments(
-    edges,
-    new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 200 })
-  );
-  cube.add(line);
 
   const body = new CANNON.Body({
     mass: 1,
@@ -147,13 +139,15 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
 
       tweensGroup.add(tween);
 
+      if (dIdx === 1) {
+        setTimeout(() => {
+          updateDjName(djOne, djTwo);
+        }, 3000);
+      }
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
       }, 1000);
     });
   });
-  setTimeout(() => {
-    updateDjName(djOne, djTwo);
-  }, 2000);
 }
