@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { firstList, secondList } from "./options.js";
 import { clearDjName, updateDjName } from "./dj.js";
-import { initNameCanvas } from "./canvas.js";
 
 export function initDice({ physicsWorld, scene }) {
   const dice1 = createDice({ physicsWorld, scene, index: 0 });
@@ -18,15 +17,15 @@ export function createDice({ physicsWorld, scene, index }) {
   const textureLoader = new THREE.TextureLoader();
   const textures = [
     index === 0
-      ? textureLoader.load("assets/naomi.png")
-      : textureLoader.load("assets/albertina.png"),
+      ? textureLoader.load("assets/faces/naomi.png")
+      : textureLoader.load("assets/faces/albertina.png"),
     index === 0
-      ? textureLoader.load("assets/becca.png")
-      : textureLoader.load("assets/hiteca.png"),
-    textureLoader.load("assets/abdiablo.png"),
-    textureLoader.load("assets/lc.png"),
-    textureLoader.load("assets/randy.png"),
-    textureLoader.load("assets/viriss.png"),
+      ? textureLoader.load("assets/faces/becca.png")
+      : textureLoader.load("assets/faces/hiteca.png"),
+    textureLoader.load("assets/faces/abdiablo.png"),
+    textureLoader.load("assets/faces/lc.png"),
+    textureLoader.load("assets/faces/randy.png"),
+    textureLoader.load("assets/faces/viriss.png"),
   ];
 
   const materials = textures.map(

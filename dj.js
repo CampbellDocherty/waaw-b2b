@@ -1,62 +1,57 @@
 import { initNameCanvas } from "./canvas.js";
 
-function randomIntFromInterval(min, max) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 let fonts = {
   abdi: {
-    src: "assets/abdi-font.jpg",
+    src: "assets/fonts/abdi-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   naomi: {
-    src: "assets/naomi-font.jpg",
+    src: "assets/fonts/naomi-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   clarisse: {
-    src: "assets/viriss-font.jpg",
+    src: "assets/fonts/viriss-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   becca: {
-    src: "assets/becca-font.jpg",
+    src: "assets/fonts/becca-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   lc: {
-    src: "assets/lc-font.jpg",
+    src: "assets/fonts/lc-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   randy: {
-    src: "assets/randy-font.jpg",
+    src: "assets/fonts/randy-font.jpg",
     width: 600,
     height: 250,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   albertina: {
-    src: "assets/albertina-font.jpg",
+    src: "assets/fonts/albertina-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
   hiteca: {
-    src: "assets/hiteca-font.jpg",
+    src: "assets/fonts/hiteca-font.jpg",
     width: 500,
     height: 200,
     xSpeed: 0.9,
