@@ -81,9 +81,6 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
     copy = options.slice();
   }
 
-  let djOne = "";
-  let djTwo = "";
-
   dice.forEach((d, dIdx) => {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
@@ -95,11 +92,6 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
     d.body.quaternion.copy(d.mesh.quaternion);
 
     const element = getRandomElement(copy);
-    if (dIdx === 0) {
-      djOne = element.dj;
-    } else {
-      djTwo = element.dj;
-    }
 
     const { randomForce, position } = element;
 
@@ -138,17 +130,13 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
-        updateDjName(djOne, djTwo);
+        updateDjName(element.dj, dIdx === 0 ? "dj-one" : "dj-two");
       }, 1000);
     });
   });
 }
 
-function updateDjName(djOne, djTwo) {
-  console.log(djOne, djTwo);
-  const djOneEl = document.getElementById("dj-one");
-  const djTwoEl = document.getElementById("dj-two");
-
-  djOneEl.textContent = djOne;
-  djTwoEl.textContent = djTwo;
+function updateDjName(text, id) {
+  const el = document.getElementById(id);
+  el.textContent = text;
 }
