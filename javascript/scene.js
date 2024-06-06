@@ -19,7 +19,7 @@ export function initScene() {
     0.1,
     300
   );
-  camera.position.set(0, 12, 0);
+  camera.position.set(0, 15, 0);
   camera.lookAt(0, 0, 0);
 
   updateSceneSize(camera, renderer);
