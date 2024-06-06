@@ -1,22 +1,27 @@
 import * as CANNON from "cannon-es";
 import * as THREE from "three";
 import { Easing, Tween } from "@tweenjs/tween.js";
-import { options } from "./options.js";
+import { firstList, secondList } from "./options.js";
+import { updateDjName } from "./dj.js";
 
 export function initDice({ physicsWorld, scene }) {
-  const dice1 = createDice({ physicsWorld, scene });
-  const dice2 = createDice({ physicsWorld, scene });
+  const dice1 = createDice({ physicsWorld, scene, index: 0 });
+  const dice2 = createDice({ physicsWorld, scene, index: 1 });
 
   const dice = [dice1, dice2];
   initDicePosition(dice);
   return dice;
 }
 
-export function createDice({ physicsWorld, scene }) {
+export function createDice({ physicsWorld, scene, index }) {
   const textureLoader = new THREE.TextureLoader();
   const textures = [
-    textureLoader.load("assets/naomi.png"),
-    textureLoader.load("assets/becca.png"),
+    index === 0
+      ? textureLoader.load("assets/naomi.png")
+      : textureLoader.load("assets/albertina.png"),
+    index === 0
+      ? textureLoader.load("assets/becca.png")
+      : textureLoader.load("assets/hiteca.png"),
     textureLoader.load("assets/abdiablo.png"),
     textureLoader.load("assets/lc.png"),
     textureLoader.load("assets/randy.png"),
@@ -66,19 +71,21 @@ export function initDicePosition(dice) {
   });
 }
 
+let firstListCopy = firstList.slice();
+let secondListCopy = secondList.slice();
+
 function getRandomElement(arr) {
   const index = Math.floor(Math.random() * arr.length);
   const element = arr.splice(index, 1)[0];
   return element;
 }
 
-let copy = options.slice();
-
 export function throwDice({ dice, physicsWorld, tweensGroup }) {
   physicsWorld.gravity.set(0, -50, 0);
   tweensGroup.removeAll();
-  if (copy.length === 0) {
-    copy = options.slice();
+  if (firstListCopy.length === 0) {
+    firstListCopy = firstList.slice();
+    secondListCopy = secondList.slice();
   }
 
   dice.forEach((d, dIdx) => {
@@ -91,7 +98,10 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
     d.mesh.rotation.set(0, 0, 0);
     d.body.quaternion.copy(d.mesh.quaternion);
 
-    const element = getRandomElement(copy);
+    const element = getRandomElement(
+      dIdx === 0 ? firstListCopy : secondListCopy
+    );
+    console.log(element);
 
     const { randomForce, position } = element;
 
@@ -130,6 +140,7 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
+        updateDjName(element.dj, dIdx === 0 ? "dj-one" : "dj-two");
       }, 1000);
     });
   });
