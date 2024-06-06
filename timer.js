@@ -1,6 +1,6 @@
 const timerElement = document.getElementById("timer");
 
-export const initialCountdownTime = 10;
+export const initialCountdownTime = 3600;
 
 let countdownTime = initialCountdownTime;
 

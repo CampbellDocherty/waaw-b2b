@@ -25,7 +25,7 @@ export const firstList = [
   {
     dj: "becca",
     value: 5,
-    randomForce: 0.2 + 0.4 * 0.6382086306602428,
+    randomForce: 0.2 + 0.37 * 0.6382086306602428,
     position: new CANNON.Vec3(0.4, 0.8, 0.6),
     link: "assets/becca.png",
   },
