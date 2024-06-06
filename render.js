@@ -10,17 +10,25 @@ export function render({
 }) {
   physicsWorld.fixedStep();
 
-  dice.forEach((dice, index) => {
-    dice.mesh.position.copy(dice.body.position);
-    dice.mesh.quaternion.copy(dice.body.quaternion);
-    if (!physicsWorld.gravity.isZero() || djSelected) {
-      return;
-    }
+  const [firstDice, secondDice] = dice;
 
-    dice.mesh.rotation.x += index === 0 ? 0.007 : 0.004;
-    dice.mesh.rotation.y += index === 0 ? 0.003 : 0.003;
-    dice.mesh.rotation.z += index === 0 ? 0.004 : 0.008;
-    dice.body.quaternion.copy(dice.mesh.quaternion);
+  rotate({
+    physicsWorld,
+    dice: firstDice,
+    rotation: {
+      x: 0.007,
+      y: 0.003,
+      z: 0.004,
+    },
+  });
+  rotate({
+    physicsWorld,
+    dice: secondDice,
+    rotation: {
+      x: -0.004,
+      y: -0.003,
+      z: 0.008,
+    },
   });
 
   renderer.render(scene, camera);
@@ -38,4 +46,16 @@ export function render({
       physicsWorld,
     })
   );
+}
+function rotate({ physicsWorld, dice, rotation }) {
+  dice.mesh.position.copy(dice.body.position);
+  dice.mesh.quaternion.copy(dice.body.quaternion);
+  if (!physicsWorld.gravity.isZero() || djSelected) {
+    return;
+  }
+
+  dice.mesh.rotation.x += rotation.x;
+  dice.mesh.rotation.y += rotation.y;
+  dice.mesh.rotation.z += rotation.z;
+  dice.body.quaternion.copy(dice.mesh.quaternion);
 }

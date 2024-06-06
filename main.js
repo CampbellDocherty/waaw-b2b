@@ -36,6 +36,9 @@ window.addEventListener(
       tweensGroup,
     });
     djSelected = true;
+    setTimeout(() => {
+      djSelected = false;
+    }, 6000);
     setInterval(() => {
       djSelected = false;
       throwDice({

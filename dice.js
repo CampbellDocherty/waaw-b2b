@@ -62,7 +62,7 @@ export function initDicePosition(dice) {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2.5 : 2.5, 0, 1);
     d.mesh.position.copy(d.body.position);
 
     d.mesh.rotation.set(0, 0, 0);
@@ -96,7 +96,7 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2.5 : 2.5, 0, 1);
     d.mesh.position.copy(d.body.position);
 
     d.mesh.rotation.set(0, 0, 0);
