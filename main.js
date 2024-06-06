@@ -4,6 +4,7 @@ import { initPhysics } from "./physics.js";
 import { createFloor, initScene } from "./scene.js";
 import { render } from "./render.js";
 import { throwDice } from "./dice.js";
+import { updateTimer, initialCountdownTime } from "./timer.js";
 
 export let djSelected = false;
 
@@ -23,26 +24,6 @@ render({
   camera,
   physicsWorld,
 });
-
-const timerElement = document.getElementById("timer");
-
-const initialCountdownTime = 3600;
-let countdownTime = initialCountdownTime;
-function updateTimer() {
-  const hours = Math.floor(countdownTime / 3600);
-  const minutes = Math.floor((countdownTime % 3600) / 60);
-  const seconds = countdownTime % 60;
-
-  timerElement.textContent = `${String(hours).padStart(2, "0")}:${String(
-    minutes
-  ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-  countdownTime--;
-
-  if (countdownTime < 0) {
-    countdownTime = initialCountdownTime;
-  }
-}
 
 window.addEventListener("click", updateTimer, { once: true });
 window.addEventListener(

@@ -92,6 +92,7 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
     d.body.quaternion.copy(d.mesh.quaternion);
 
     const element = getRandomElement(copy);
+    console.log(element);
 
     const { randomForce, position } = element;
 
