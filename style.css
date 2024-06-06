@@ -24,20 +24,6 @@
   margin: 0;
 }
 
-#current {
+#name-canvas {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  z-index: 100;
-  flex-direction: row;
-  gap: 10px;
-  color: white;
-  font-size: 30px;
-  padding: 0;
-  margin: 0;
-}
-
-#current img {
-  height: 90px;
 }
