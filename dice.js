@@ -2,7 +2,8 @@ import * as CANNON from "cannon-es";
 import * as THREE from "three";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { firstList, secondList } from "./options.js";
-import { updateDjName } from "./dj.js";
+import { clearDjName, updateDjName } from "./dj.js";
+import { initNameCanvas } from "./canvas.js";
 
 export function initDice({ physicsWorld, scene }) {
   const dice1 = createDice({ physicsWorld, scene, index: 0 });
@@ -32,11 +33,10 @@ export function createDice({ physicsWorld, scene, index }) {
     (texture) =>
       new THREE.MeshLambertMaterial({
         map: texture,
-        alphaTest: 0.8,
       })
   );
 
-  const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+  const geometry = new THREE.BoxGeometry(2.5, 2.5, 2.5);
   const cube = new THREE.Mesh(geometry, materials);
 
   scene.add(cube);
@@ -63,7 +63,7 @@ export function initDicePosition(dice) {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2.5 : 2.5, 0, 1);
     d.mesh.position.copy(d.body.position);
 
     d.mesh.rotation.set(0, 0, 0);
@@ -83,16 +83,21 @@ function getRandomElement(arr) {
 export function throwDice({ dice, physicsWorld, tweensGroup }) {
   physicsWorld.gravity.set(0, -50, 0);
   tweensGroup.removeAll();
+  clearDjName();
+
   if (firstListCopy.length === 0) {
     firstListCopy = firstList.slice();
     secondListCopy = secondList.slice();
   }
 
+  let djOne = "";
+  let djTwo = "";
+
   dice.forEach((d, dIdx) => {
     d.body.velocity.setZero();
     d.body.angularVelocity.setZero();
 
-    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2 : 2, 0, 1);
+    d.body.position = new CANNON.Vec3(dIdx === 0 ? -2.5 : 2.5, 0, 1);
     d.mesh.position.copy(d.body.position);
 
     d.mesh.rotation.set(0, 0, 0);
@@ -101,7 +106,12 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
     const element = getRandomElement(
       dIdx === 0 ? firstListCopy : secondListCopy
     );
-    console.log(element);
+    if (dIdx === 0) {
+      djOne = element.dj;
+    }
+    if (dIdx === 1) {
+      djTwo = element.dj;
+    }
 
     const { randomForce, position } = element;
 
@@ -140,8 +150,10 @@ export function throwDice({ dice, physicsWorld, tweensGroup }) {
       setTimeout(() => {
         tween.start();
         physicsWorld.gravity.setZero();
-        updateDjName(element.dj, dIdx === 0 ? "dj-one" : "dj-two");
       }, 1000);
     });
   });
+  setTimeout(() => {
+    updateDjName(djOne, djTwo);
+  }, 2000);
 }

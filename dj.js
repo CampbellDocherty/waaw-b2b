@@ -1,43 +1,88 @@
-import * as THREE from "three";
+import { initNameCanvas } from "./canvas.js";
 
-export function updateDjName(text, id) {
-  const el = document.getElementById(id);
-  el.textContent = text;
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function updateDjsOnDice(dice, djsToSubstitute) {
-  dice.forEach((dice) => {
-    const textureLoader = new THREE.TextureLoader();
+let fonts = {
+  abdi: {
+    src: "assets/abdi-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  naomi: {
+    src: "assets/naomi-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  clarisse: {
+    src: "assets/viriss-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  becca: {
+    src: "assets/becca-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  lc: {
+    src: "assets/lc-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  randy: {
+    src: "assets/randy-font.jpg",
+    width: 600,
+    height: 250,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  albertina: {
+    src: "assets/albertina-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+  hiteca: {
+    src: "assets/hiteca-font.jpg",
+    width: 500,
+    height: 200,
+    xSpeed: 0.9,
+    ySpeed: 0.9,
+  },
+};
 
-    let currentdjAssets = [
-      "assets/naomi.png",
-      "assets/becca.png",
-      "assets/abdiablo.png",
-      "assets/lc.png",
-      "assets/randy.png",
-      "assets/viriss.png",
-    ];
+export function updateDjName(djOne, djTwo) {
+  const fontOne = fonts[djOne];
+  const fontTwo = fonts[djTwo];
 
-    const newDjAssets = ["assets/albertina.png", "assets/hiteca.png"];
+  fontOne.x = 700;
+  fontOne.y = 5;
 
-    djsToSubstitute.forEach((djToSubstitute, i) => {
-      const index = currentdjAssets.indexOf(djToSubstitute.link);
+  fontTwo.x = 605;
+  fontTwo.y = 805;
+  fontTwo.xSpeed = -fontTwo.xSpeed;
+  fontTwo.ySpeed = -fontTwo.ySpeed;
 
-      if (index > -1) {
-        currentdjAssets[index] = newDjAssets[i];
-      }
-    });
+  initNameCanvas([fonts[djOne], fonts[djTwo]]);
+}
 
-    const textures = currentdjAssets.map((dj) => textureLoader.load(dj));
+export function clearDjName() {
+  const elOne = document.getElementById("dj-one");
+  const elTwo = document.getElementById("dj-two");
 
-    const materials = textures.map(
-      (texture) =>
-        new THREE.MeshLambertMaterial({
-          map: texture,
-          alphaTest: 0.8,
-        })
-    );
-
-    dice.mesh.material = materials;
-  });
+  elOne.src = "";
+  elTwo.src = "";
 }

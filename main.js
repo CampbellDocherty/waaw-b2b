@@ -5,7 +5,6 @@ import { createFloor, initScene } from "./scene.js";
 import { render } from "./render.js";
 import { throwDice } from "./dice.js";
 import { updateTimer, initialCountdownTime } from "./timer.js";
-import { updateDjsOnDice } from "./dj.js";
 
 export let djSelected = false;
 
@@ -37,6 +36,9 @@ window.addEventListener(
       tweensGroup,
     });
     djSelected = true;
+    setTimeout(() => {
+      djSelected = false;
+    }, 6000);
     setInterval(() => {
       djSelected = false;
       throwDice({
