@@ -22,7 +22,7 @@ export const options = [
   {
     dj: "clarisse",
     value: 4,
-    randomForce: 0.2 + 0.7 * 0.7532962453133706,
+    randomForce: 0.25,
     position: new CANNON.Vec3(0, 0, 0.2),
   },
   {
@@ -34,7 +34,7 @@ export const options = [
   {
     dj: "lc",
     value: 6,
-    randomForce: 0.7 + 0.24 * 0.7532962453133706,
+    randomForce: 0.3 + 0.24 * 0.3532962453133706,
     position: new CANNON.Vec3(0.4, 0, 0.2),
   },
 ];
