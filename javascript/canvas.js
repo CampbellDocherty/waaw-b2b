@@ -1,6 +1,7 @@
 export function initNameCanvas(backgroundImages) {
   const canvas = document.getElementById("name-canvas");
   const context = canvas.getContext("2d");
+
   const draw = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -11,7 +12,8 @@ export function initNameCanvas(backgroundImages) {
     canvas.style.left = "0";
     context.fillStyle = "transparent";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    backgroundImages.forEach((backgroundImage) => {
+
+    backgroundImages.forEach((backgroundImage, index) => {
       const { src, width, height } = backgroundImage;
       let { x, y, xSpeed, ySpeed } = backgroundImage;
       x = x + xSpeed;

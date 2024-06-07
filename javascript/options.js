@@ -49,7 +49,7 @@ export const secondList = [
   {
     dj: "albertina",
     value: 2,
-    randomForce: 0.2 + 0.4 * 0.6195434488172735,
+    randomForce: -0.5 + -0.4 * 0.6195434488172735,
     position: new CANNON.Vec3(0.4, 0, 0.2),
     link: "assets/albertina.png",
   },

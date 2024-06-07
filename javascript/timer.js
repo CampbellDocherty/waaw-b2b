@@ -1,10 +1,14 @@
 const timerElement = document.getElementById("timer");
 
-export const initialCountdownTime = 3600;
+export const initialCountdownTime = 10;
 
 let countdownTime = initialCountdownTime;
 
-export function updateTimer() {
+export function resetTimer() {
+  countdownTime = initialCountdownTime;
+}
+
+export function updateTimer(cb) {
   const hours = Math.floor(countdownTime / 3600);
   const minutes = Math.floor((countdownTime % 3600) / 60);
   const seconds = countdownTime % 60;
@@ -16,6 +20,8 @@ export function updateTimer() {
   countdownTime--;
 
   if (countdownTime < 0) {
+    timerElement.textContent = "";
+    cb();
     countdownTime = initialCountdownTime;
   }
 }
