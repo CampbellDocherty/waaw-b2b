@@ -1,10 +1,8 @@
 import { Group } from "@tweenjs/tween.js";
-import { initDice } from "./dice.js";
+import { initDice, throwDice } from "./dice.js";
 import { initPhysics } from "./physics.js";
-import { createFloor, initScene } from "./scene.js";
 import { render } from "./render.js";
-import { throwDice } from "./dice.js";
-import { updateTimer, initialCountdownTime } from "./timer.js";
+import { createFloor, initScene } from "./scene.js";
 
 export let djSelected = false;
 
@@ -25,29 +23,14 @@ render({
   physicsWorld,
 });
 
-window.addEventListener("click", updateTimer, { once: true });
-window.addEventListener(
-  "click",
-  () => {
-    setInterval(updateTimer, 1000);
-    throwDice({
-      dice,
-      physicsWorld,
-      tweensGroup,
-    });
-    djSelected = true;
-    setTimeout(() => {
-      djSelected = false;
-    }, 6000);
-    setInterval(() => {
-      djSelected = false;
-      throwDice({
-        dice,
-        physicsWorld,
-        tweensGroup,
-      });
-      djSelected = true;
-    }, initialCountdownTime * 1000);
-  },
-  { once: true }
-);
+window.addEventListener("click", () => {
+  throwDice({
+    dice,
+    physicsWorld,
+    tweensGroup,
+  });
+  djSelected = true;
+  setTimeout(() => {
+    djSelected = false;
+  }, 6000);
+});

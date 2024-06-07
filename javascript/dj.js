@@ -38,8 +38,8 @@ let fonts = {
   },
   randy: {
     src: "assets/fonts/randy-font.png",
-    width: 500,
-    height: 200,
+    width: 400,
+    height: 150,
     xSpeed: 0.9,
     ySpeed: 0.9,
   },
