@@ -2,9 +2,6 @@ export function initNameCanvas(backgroundImages) {
   const canvas = document.getElementById("name-canvas");
   const context = canvas.getContext("2d");
 
-  if (canvas.style.width) {
-    console.log(canvas);
-  }
   const draw = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
